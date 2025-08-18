@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Web Loader</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    input {
+      width: 60%;
+      padding: 8px;
+      margin-right: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 8px 12px;
+      margin: 4px;
+      border: none;
+      border-radius: 6px;
+      background: #0078d7;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005a9e;
+    }
+    iframe {
+      display: block;
+      width: 100%;
+      height: 400px;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Website Loader</h2>
+  <input type="text" id="url" placeholder="Enter a website URL (e.g. https://example.com)">
+  <br>
+  <button onclick="openAboutBlank()">Open in about:blank</button>
+  <button onclick="renderIframe()">Render in this page</button>
+  <button onclick="openBlob()">Open in blob:</button>
+
+  <iframe id="viewer"></iframe>
+
+  <script>
+    function getUrl() {
+      let url = document.getElementById("url").value.trim();
+      if (!/^https?:\/\//i.test(url)) {
+        url = "https://" + url; // auto-add https if missing
+      }
+      return url;
+    }
+
+    // Open in about:blank with iframe
+    function openAboutBlank() {
+      const url = getUrl();
+      const win = window.open("about:blank");
+      win.document.write(`<iframe src="${url}" style="width:100%;height:100%;border:none;"></iframe>`);
+    }
+
+    // Render in this page iframe
+    function renderIframe() {
+      document.getElementById("viewer").src = getUrl();
+    }
+
+    // Open inside a blob URL page
+    function openBlob() {
+      const url = getUrl();
+      const blobContent = `
+        <!DOCTYPE html>
+        <html>
+        <head><title>Blob Viewer</title></head>
+        <body style="margin:0">
+          <iframe src="${url}" style="width:100vw;height:100vh;border:none;"></iframe>
+        </body>
+        </html>
+      `;
+      const blob = new Blob([blobContent], { type: "text/html" });
+      const blobUrl = URL.createObjectURL(blob);
+      window.open(blobUrl);
+    }
+  </script>
+</body>
+</html>
