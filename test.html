@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>about:blank Opener</title>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding-top: 100px;">
+  <h1>Open a URL in about:blank</h1>
+  <p>Enter a website URL:</p>
+  <input id="url-target" type="url" placeholder="https://example.com" style="width: 300px; padding: 8px;">
+  <button id="create" style="padding: 8px 16px;">Open</button>
+
+  <script>
+    document.getElementById("create").addEventListener("click", () => {
+      const url = document.getElementById("url-target").value;
+      if (!url) return alert("Please enter a URL.");
+
+      const tab = window.open("about:blank", "_blank");
+      if (tab) {
+        tab.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>${url}</title>
+            <style>
+              body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                overflow: hidden;
+              }
+              iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+              }
+            </style>
+          </head>
+          <body>
+            <iframe src="${url}" allowfullscreen></iframe>
+          </body>
+          </html>
+        `);
+        tab.document.close();
+      }
+    });
+  </script>
+</body>
+</html>
